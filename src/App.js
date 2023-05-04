@@ -1,9 +1,16 @@
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import './App.css';
 import Alert from './Components/Alert';
 import Navbar from './Components/Navbar';
 import Textform from './Components/Textform';
-//import About from './Components/About';
+import About from './Components/About';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Utility from './Components/Utility';
+
 function App() {
   const [mode,setMode]=useState('light')
   const[alert,setAlert]=useState(null)
@@ -12,14 +19,14 @@ function App() {
       msg:message,
       type:type
     })
-    const setTimeout=(()=>{
+    setTimeout(()=>{
       setAlert(null)
-    },3000);
+    },2000);
   }
   const toggleMode=()=>{
     if(mode==='light'){
       setMode('dark')
-      document.body.style.backgroundColor='grey'
+      document.body.style.backgroundColor='black'
       showAlert('This is dark mode','success')
     }
     else{
@@ -30,16 +37,19 @@ function App() {
     }
   }
   return (
-    <>
+    
+    <Router>
       <Navbar title="TextUtility" abouttitle="About Us" mode={mode} toggleMode={toggleMode}/>
       <Alert alert={alert}/>
-      <div className='container'>
-        <Textform heading="Text Area" showAlert={showAlert} mode={mode}/></div>
-      
-      {/* <div className="container my-4">
-        <About/>
-      </div> */}
-    </>
+      <div className='container my-3'>
+      <Routes>
+          <Route exact path="/about" element={<About mode={mode}/>} />
+          <Route exact path="/home" element={<Textform heading="Text Area" showAlert={showAlert} mode={mode}/>} />
+          <Route exact path="/TextUtility" element={<Utility mode={mode}/>}/>
+        </Routes>
+        </div>
+        </Router>
+    
   );
 }
 
